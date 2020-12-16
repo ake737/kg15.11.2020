@@ -7,6 +7,15 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <exception>
+#include <cassert>
+
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <cassert>
+#include <exception>
 
 #include <vector>
 
@@ -15,7 +24,9 @@ enum Camera_Movement {
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN
 };
 
 // Default camera values
@@ -51,18 +62,9 @@ public:
         WorldUp = up;
         Yaw = yaw;
         Pitch = pitch;
-        updateCameraVectors();
+        updateCameraVectors();   
     }
-    // Constructor with scalar values
-    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
-    {
-        Position = glm::vec3(posX, posY, posZ);
-        WorldUp = glm::vec3(upX, upY, upZ);
-        Yaw = yaw;
-        Pitch = pitch;
-        updateCameraVectors();
-    }
-
+   
     // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
     glm::mat4 GetViewMatrix()
     {
@@ -81,6 +83,10 @@ public:
             Position -= Right * velocity;
         if (direction == RIGHT)
             Position += Right * velocity;
+        if (direction == UP)
+            Position += Up * velocity;
+        if (direction == DOWN)
+            Position -= Up * velocity;
     }
 
     // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
@@ -93,7 +99,7 @@ public:
         Pitch += yoffset;
 
         // Make sure that when pitch is out of bounds, screen doesn't get flipped
-        if (constrainPitch)
+        if (constrainPitch)//реализуем ограничение поворота камеры
         {
             if (Pitch > 89.0f)
                 Pitch = 89.0f;
