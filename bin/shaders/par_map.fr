@@ -18,7 +18,7 @@ uniform float heightScale;
 
 vec2 ParallaxMapping(vec2 inTexCoords, vec3 inViewDir)
 { 
-    const float _minLayers = 2.;
+    const float _minLayers = 4.;
 	const float _maxLayers = 32.;
 	float _numLayers = mix(_maxLayers, _minLayers, abs(dot(vec3(0., 0., 1.), inViewDir)));
 

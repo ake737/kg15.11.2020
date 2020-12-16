@@ -25,11 +25,11 @@ void main()
     vs_out.FragPos = vec3(model * vec4(aPos, 1.0));   
     vs_out.TexCoords = aTexCoords;
     
-    mat3 normalMatrix = transpose(inverse(mat3(model)));
+    mat3 normalMatrix = transpose(inverse(mat3(model)));//преобразуем коорднаты базисного пространства в мировую систему координат
     vec3 T = normalize(normalMatrix * aTangent);
     vec3 N = normalize(normalMatrix * aNormal);
     T = normalize(T - dot(T, N) * N);
-    vec3 B = cross(N, T);
+    vec3 B = cross(N, T);//бикасательная
     
     mat3 TBN = transpose(mat3(T, B, N));    
     vs_out.TangentLightPos = TBN * lightPos;
